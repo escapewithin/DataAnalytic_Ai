@@ -1,0 +1,6 @@
+{
+  "project_directory": "projects",
+  "default_model": "gpt-4o",
+  "ui_title": "AI Workflow Assistant for Junior Analysts"
+}
+

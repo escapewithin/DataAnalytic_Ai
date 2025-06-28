@@ -1,0 +1,48 @@
+Last login: Thu Jun 26 19:45:02 on ttys000
+(base) yc@Ys-MacBook-Pro ~ % ls
+Applications		Movies			RealWorldData.db
+Desktop			Music			Untitled.ipynb
+Documents		Notebook		Untitled1.ipynb
+Downloads		Pictures		anaconda_projects
+Grades.ipynb		Public			sales_data.csv
+Library			PyCharmMiscProject	socioeconomic.db
+Local Sites		PycharmProjects
+(base) yc@Ys-MacBook-Pro ~ % cd desktop
+(base) yc@Ys-MacBook-Pro desktop % AI-Assistant/config/settings.json
+zsh: permission denied: AI-Assistant/config/settings.json
+(base) yc@Ys-MacBook-Pro desktop % cd AI-Assistant
+(base) yc@Ys-MacBook-Pro AI-Assistant % cd AI-Assistant
+cd: no such file or directory: AI-Assistant
+(base) yc@Ys-MacBook-Pro AI-Assistant % ls
+__pycache__		data			requirements.txt
+app.py			modules			tests
+assets			project_manager.py
+config			projects
+(base) yc@Ys-MacBook-Pro AI-Assistant % ls config
+settings.json		settings.json.save
+(base) yc@Ys-MacBook-Pro AI-Assistant % nano config/settings.json
+
+  UW PICO 5.09               File: config/settings.json               Modified  
+
+{                        
+  "company_name": "Your Company Name",
+  "default_project_path": "projects/",
+$jSVT6-Ieyx7NeZ6MvDwP2lhn_-_MtUN8J7Do4A",
+  "brd_template_path": "modules/brd_builder.py",
+  "default_kpis": [
+    "Churn rate",
+    "Conversion rate",
+    "Retention rate"
+  ]
+}
+
+
+
+
+
+
+
+
+
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Pg   ^K Cut Text  ^C Cur Pos   
+^X Exit      ^J Justify   ^W Where is  ^V Next Pg   ^U UnCut Text^T To Spell  
