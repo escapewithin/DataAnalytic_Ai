@@ -58,45 +58,43 @@ else:
     st.session_state.project_name = selected.replace(".json", "")
     st.session_state.history = load_project(selected)
 
-# Initialize chat history
-if "history" not in st.session_state:
-    st.session_state.history = []
+# Create app tabs
+tab1, tab2, tab3 = st.tabs(["💬 AI Chat", "📝 BRD Builder", "📁 View Saved BRDs"])
 
-# Chat interface
-for msg in st.session_state.history:
-    if msg["role"] == "user":
-        st.chat_message("user").write(msg["content"])
-    elif msg["role"] == "assistant":
-        st.chat_message("assistant").write(msg["content"])
+# === Tab 1: AI Chat ===
+with tab1:
+    for msg in st.session_state.history:
+        if msg["role"] == "user":
+            st.chat_message("user").write(msg["content"])
+        elif msg["role"] == "assistant":
+            st.chat_message("assistant").write(msg["content"])
 
-# Input + BRD trigger
-user_input = st.chat_input("Ask a question or describe your task:")
-if user_input:
-    st.session_state.history.append({"role": "user", "content": user_input})
+    user_input = st.chat_input("Ask a question or describe your task:")
+    if user_input:
+        st.session_state.history.append({"role": "user", "content": user_input})
 
-    messages = [
-        {"role": "system", "content": (
-            "You are a helpful assistant for junior data/business analysts. "
-            "Act like a senior analyst mentor. For every task, break it down into steps, offer guidance, and always end with:\n"
-            "➡️ 'What would you like to do next? I can help you explore data, write a BRD, run code, or create a dashboard.'"
-        )}
-    ] + st.session_state.history
+        messages = [
+            {"role": "system", "content": (
+                "You are a helpful assistant for junior data/business analysts. "
+                "Act like a senior analyst mentor. For every task, break it down into steps, offer guidance, and always end with:\n"
+                "➡️ 'What would you like to do next? I can help you explore data, write a BRD, run code, or create a dashboard.'"
+            )}
+        ] + st.session_state.history
 
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=messages,
-        temperature=0.7
-    )
-    reply = response.choices[0].message.content
-    st.session_state.history.append({"role": "assistant", "content": reply})
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            temperature=0.7
+        )
+        reply = response.choices[0].message.content
+        st.session_state.history.append({"role": "assistant", "content": reply})
 
-    # Save progress
-    save_project(st.session_state.project_name, st.session_state.history)
-    st.rerun()
+        save_project(st.session_state.project_name, st.session_state.history)
+        st.rerun()
 
-# BRD Builder (Phase 1 UI)
-with st.sidebar.expander("📝 Write a BRD"):
-    with st.form("brd_form"):
+# === Tab 2: BRD Builder ===
+with tab2:
+    with st.form("brd_form_unique"):
         project_name = st.text_input("Project Name")
         overview = st.text_area("Project Overview")
         objectives = st.text_area("Objectives")
@@ -126,16 +124,15 @@ with st.sidebar.expander("📝 Write a BRD"):
         with open(brd_path, "rb") as f:
             st.download_button("⬇️ Download BRD", f, file_name=brd_filename)
 
-        # ========== BRD Viewer Tab ==========
-        with tab3:
-            st.subheader("📁 View Saved BRDs")
-
-            brd_files = [f for f in os.listdir(PROJECT_DIR) if f.endswith(".md")]
-            if not brd_files:
-                st.info("No BRD files found.")
-            else:
-                selected_file = st.selectbox("Select a BRD to view:", brd_files)
-                if selected_file:
-                    with open(os.path.join(PROJECT_DIR, selected_file), "r") as f:
-                        brd_content = f.read()
-                    st.code(brd_content, language="markdown")
+# === Tab 3: BRD Viewer ===
+with tab3:
+    st.subheader("📁 View Saved BRDs")
+    brd_files = [f for f in os.listdir(PROJECT_DIR) if f.endswith(".md")]
+    if not brd_files:
+        st.info("No BRD files found.")
+    else:
+        selected_file = st.selectbox("Select a BRD to view:", brd_files)
+        if selected_file:
+            with open(os.path.join(PROJECT_DIR, selected_file), "r") as f:
+                brd_content = f.read()
+            st.code(brd_content, language="markdown")
