@@ -5,6 +5,13 @@ from datetime import datetime
 from openai import OpenAI
 from modules.brd_builder import build_brd
 
+# --- Initialize Streamlit session state ---
+if "project_name" not in st.session_state:
+    st.session_state.project_name = ""
+
+if "history" not in st.session_state:
+    st.session_state.history = []
+
 # Load settings
 with open("config/settings.json") as f:
     settings = json.load(f)
@@ -118,3 +125,17 @@ with st.sidebar.expander("📝 Write a BRD"):
             st.markdown(markdown)
         with open(brd_path, "rb") as f:
             st.download_button("⬇️ Download BRD", f, file_name=brd_filename)
+
+        # ========== BRD Viewer Tab ==========
+        with tab3:
+            st.subheader("📁 View Saved BRDs")
+
+            brd_files = [f for f in os.listdir(PROJECT_DIR) if f.endswith(".md")]
+            if not brd_files:
+                st.info("No BRD files found.")
+            else:
+                selected_file = st.selectbox("Select a BRD to view:", brd_files)
+                if selected_file:
+                    with open(os.path.join(PROJECT_DIR, selected_file), "r") as f:
+                        brd_content = f.read()
+                    st.code(brd_content, language="markdown")
